@@ -1,4 +1,4 @@
-var has = { |cmd|
+fn has { |cmd|
 	try {
 		which $cmd
 		put $true

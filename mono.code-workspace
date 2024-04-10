@@ -9,8 +9,8 @@
 			"name": "workflows",
 		},
 		{
-			"path": "actions/cli-auth",
-			"name": "actions/cli-auth",
+			"path": "actions/gh-cli",
+			"name": "actions/gh-cli",
 		},
 		{
 			"path": "actions/common-env",

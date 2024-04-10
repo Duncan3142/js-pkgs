@@ -19,8 +19,8 @@ var printInstalled = { |check name|
 	}
 }
 
-$printInstalled $cmdV1:has elvish
-$printInstalled $cmdV1:has fish
+$printInstalled {|name| cmdV1:has $name } elvish
+$printInstalled {|name| cmdV1:has $name } fish
 
 $printInstalled $cmdV2:has elvish
 $printInstalled $cmdV2:has fish
