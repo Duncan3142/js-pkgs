@@ -1,6 +1,8 @@
+use ./ext
+
 fn has { |cmd|
 	try {
-		which $cmd
+		ext:quiet which $cmd
 		put $true
 	} catch {
 		put $false

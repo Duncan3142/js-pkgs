@@ -1,29 +1,30 @@
 #!/usr/bin/env elvish
 
 use str
-# use epm
-# epm:install github.com/Duncan3142/mono
 
-use ./cmd/v1 cmdV1
-use ./cmd/v2 cmdV2
+use ./cmd
+use ./ext
+use ./diff
 
 var title = 'Hello Elves!'
 
 echo $title
 
-var printInstalled = { |check name|
-	if ( $check $name ) {
+echo A
+ext:ext git status
+echo B
+ext:quiet git status
+
+fn printHas { |name|
+	if ( cmd:has $name ) {
 		echo $name' is installed'
 	} else {
 		echo $name' is not installed'
 	}
 }
 
-$printInstalled {|name| cmdV1:has $name } elvish
-$printInstalled {|name| cmdV1:has $name } fish
-
-$printInstalled $cmdV2:has elvish
-$printInstalled $cmdV2:has fish
+printHas elvish
+printHas fish
 
 var lines = [ ( cat './lines.txt' | from-lines ) ]
 
@@ -40,5 +41,12 @@ for x $lines {
 }
 
 echo linesCopy (count $linesCopy) $linesCopy
+
+echo A
+diff:same lines.txt lines.txt
+echo B
+diff:same lines.txt data.json
+echo C
+diff:same alpha beta
 
 echo done
