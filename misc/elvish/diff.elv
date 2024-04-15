@@ -3,14 +3,18 @@ use ./quiet
 
 fn same { |l r|
 	try {
-		quiet:only-values { ext:ex diff $l $r }
+		quiet:only-v { ext:ex diff $l $r }
 		put $true
 	} catch err {
-		var code = $err[reason][exit-status]
-		if (eq $code 1) {
+		var reason = $err[reason]
+		var code = (num -1)
+		if (has-key $reason exit-status) {
+			set code = $reason[exit-status]
+		}
+		if (== $code (num 1)) {
 			put $false
 		} else {
-			put $err
+			show $err
 			fail $err
 		}
 	}

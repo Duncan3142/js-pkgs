@@ -14,7 +14,7 @@ echo $title
 echo A
 ext:ex git status
 echo B
-quiet:all { ext:ex git status }
+quiet:silent { ext:ex git status }
 
 fn printHas { |name|
 	if ( cmd:has $name ) {
@@ -48,6 +48,10 @@ diff:same lines.txt lines.txt
 echo B
 diff:same lines.txt data.json
 echo C
-diff:same alpha beta
+try {
+	diff:same alpha beta
+} catch err {
+	put $err
+}
 
 echo done
