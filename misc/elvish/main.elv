@@ -4,6 +4,7 @@ use str
 
 use ./cmd
 use ./ext
+use ./quiet
 use ./diff
 
 var title = 'Hello Elves!'
@@ -11,9 +12,9 @@ var title = 'Hello Elves!'
 echo $title
 
 echo A
-ext:ext git status
+ext:ex git status
 echo B
-ext:quiet git status
+quiet:all { ext:ex git status }
 
 fn printHas { |name|
 	if ( cmd:has $name ) {
