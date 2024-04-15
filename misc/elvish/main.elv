@@ -51,6 +51,7 @@ echo C
 try {
 	diff:same alpha beta
 } catch err {
+	show $err
 	put $err
 }
 

@@ -1,21 +1,10 @@
 use ./ext
 use ./quiet
+use ./err
 
 fn same { |l r|
-	try {
+	err:catch-status {
 		quiet:only-v { ext:ex diff $l $r }
 		put $true
-	} catch err {
-		var reason = $err[reason]
-		var code = (num -1)
-		if (has-key $reason exit-status) {
-			set code = $reason[exit-status]
-		}
-		if (== $code (num 1)) {
-			put $false
-		} else {
-			show $err
-			fail $err
-		}
-	}
+	} { put $false }
 }
