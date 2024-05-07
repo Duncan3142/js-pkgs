@@ -49,6 +49,10 @@
 			"name": "tools/changes-cli",
 		},
 		{
+			"path": "apps/hermes",
+			"name": "apps/hermes",
+		},
+		{
 			"path": "pkgs/eslint-config",
 			"name": "pkgs/eslint-config",
 		},
