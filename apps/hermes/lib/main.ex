@@ -37,4 +37,4 @@ IO.puts("short(3) is #{short.(3)}")
 
 IO.puts(String.codepoints("👩‍🚒"))
 IO.puts(String.graphemes("👩‍🚒"))
-inspect([60, 61, 62], charlists: :as_lists)
+IO.puts(inspect([60, 61, 62], charlists: :as_lists))
