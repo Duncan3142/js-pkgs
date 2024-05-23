@@ -11,8 +11,9 @@ defmodule KV do
     send(pid, {:put, key, value})
   end
 
-  def new do
+  def new(pname) do
     {:ok, pid} = Task.start_link(fn -> loop(%{}) end)
+    Process.register(pid, pname)
     pid
   end
 
@@ -28,11 +29,22 @@ defmodule KV do
   end
 end
 
-pid = KV.new()
-KV.set(pid, :hello, "world")
-KV.set(pid, :meow, "meow")
-KV.set(pid, :one, 1)
+KV.new(:kv)
+:kv |> KV.set(:hello, "world")
+:kv |> KV.set(:meow, "meow")
+:kv |> KV.set(:one, 1)
 
-IO.puts(KV.get(pid, :hello))
-IO.puts(KV.get(pid, :meow))
-IO.puts(KV.get(pid, :one))
+:kv |> KV.get(:hello) |> IO.puts()
+:kv |> KV.get(:meow) |> IO.puts()
+:kv |> KV.get(:one) |> IO.puts()
+
+pid =
+  spawn(fn ->
+    receive do
+      {type, from, reply_as, req} ->
+        IO.inspect({type, from, reply_as, req})
+        send(from, {:io_reply, reply_as, :ok})
+    end
+  end)
+
+IO.write(pid, "hello")
