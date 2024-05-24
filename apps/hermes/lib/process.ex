@@ -2,7 +2,7 @@ send(self(), {:hello, "world"})
 send(self(), {:meow, "meow"})
 send(self(), 0)
 
-spawn(fn -> raise "oops" end)
+# spawn(fn -> raise "oops" end)
 
 Task.start(fn -> raise "darn" end)
 
@@ -30,3 +30,5 @@ spawn(fn -> send(parent, {:hello, self()}) end)
 receive do
   {:hello, pid} -> IO.puts("Got hello from #{inspect(pid)}")
 end
+
+MyMod.func()
