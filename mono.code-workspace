@@ -103,7 +103,7 @@
 				"type": "node",
 				"runtimeArgs": ["--test"],
 				"request": "launch",
-				"name": "Test",
+				"name": "Node Test",
 				"autoAttachChildProcesses": true,
 				"skipFiles": ["<node_internals>/**", "**/node_modules/**"],
 				"smartStep": true,

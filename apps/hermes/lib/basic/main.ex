@@ -14,3 +14,9 @@ mn = %MacroNutrients{ingredient: "butter", fat: 100}
 
 IO.puts(mn)
 IO.puts(Ingredient.name(mn))
+
+try do
+  raise MyException, message: "Something went wrong"
+rescue
+  e in MyException -> IO.puts("Error: #{e.message} #{e.code}")
+end
