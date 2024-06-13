@@ -1,4 +1,4 @@
-defmodule Basic.MyMod do
+defmodule Basic.Zero do
   def zero?(0), do: true
   def zero?(+0.0), do: true
   def zero?(-0.0), do: true

@@ -1,12 +1,12 @@
-defmodule Basic.MyMod.Test do
+defmodule Basic.ZeroTest do
   use ExUnit.Case, async: true
 
   test "zero?" do
-    assert Basic.MyMod.zero?(0) == true
-    assert Basic.MyMod.zero?(+0.0) == true
-    assert Basic.MyMod.zero?(-0.0) == true
-    assert Basic.MyMod.zero?(1) == false
-    assert Basic.MyMod.zero?(1.0) == false
+    assert Basic.Zero.zero?(0) == true
+    assert Basic.Zero.zero?(+0.0) == true
+    assert Basic.Zero.zero?(-0.0) == true
+    assert Basic.Zero.zero?(1) == false
+    assert Basic.Zero.zero?(1.0) == false
   end
 end
 

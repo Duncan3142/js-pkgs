@@ -1,4 +1,4 @@
-defmodule Basic.Enumstream.Test do
+defmodule Basic.EnumstreamTest do
   use ExUnit.Case, async: true
 
   test "stream" do

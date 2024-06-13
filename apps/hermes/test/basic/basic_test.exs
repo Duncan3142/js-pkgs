@@ -1,4 +1,4 @@
-defmodule Basic.Basic.Test do
+defmodule Basic.BasicTest do
   @max 8
 
   use ExUnit.Case, async: true

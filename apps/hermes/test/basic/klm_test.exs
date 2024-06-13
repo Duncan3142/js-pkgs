@@ -1,4 +1,4 @@
-defmodule Basic.Klm.Test do
+defmodule Basic.KlMTest do
   use ExUnit.Case, async: true
 
   test "greets the world" do

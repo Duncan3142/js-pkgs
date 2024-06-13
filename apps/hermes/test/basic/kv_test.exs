@@ -1,4 +1,4 @@
-defmodule Basic.KV.Test do
+defmodule Basic.KVTest do
   use ExUnit.Case, async: true
 
   test "KV" do

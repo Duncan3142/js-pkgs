@@ -1,4 +1,4 @@
-defmodule Basic.Exception.Test do
+defmodule Basic.ExceptionTest do
   use ExUnit.Case, async: true
 
   test "exception" do
