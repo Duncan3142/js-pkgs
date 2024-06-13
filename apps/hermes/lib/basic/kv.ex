@@ -11,7 +11,7 @@ defmodule Basic.KV do
     send(pid, {:put, key, value})
   end
 
-  def new(pname) do
+  def start_link(pname) do
     {:ok, pid} = Task.start_link(fn -> loop(%{}) end)
     Process.register(pid, pname)
     pid

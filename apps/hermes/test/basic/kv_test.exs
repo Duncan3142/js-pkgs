@@ -2,7 +2,7 @@ defmodule Basic.KVTest do
   use ExUnit.Case, async: true
 
   test "KV" do
-    Basic.KV.new(:kv)
+    Basic.KV.start_link(:kv)
     :kv |> Basic.KV.set(:hello, "world")
     :kv |> Basic.KV.set(:meow, "meow")
     :kv |> Basic.KV.set(:one, 1)
