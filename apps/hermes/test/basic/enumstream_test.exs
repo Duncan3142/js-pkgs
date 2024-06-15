@@ -4,7 +4,7 @@ defmodule Basic.EnumstreamTest do
   test "stream" do
     assert Basic.Enumstream.stream() == [
              "defmodule Basic.Enumstream do\n",
-             "  def stream do\n"
+             "  @moduledoc \"\"\"\n"
            ]
   end
 end

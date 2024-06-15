@@ -1,4 +1,7 @@
 defmodule Basic.ModAttr do
+  @moduledoc """
+  Module attributes.
+  """
   @sha System.cmd("git", ["rev-parse", "HEAD"]) |> elem(0) |> String.trim()
   def sha do
     @sha

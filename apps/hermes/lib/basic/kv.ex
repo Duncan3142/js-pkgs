@@ -1,4 +1,7 @@
 defmodule Basic.KV do
+  @moduledoc """
+  Key-value store.
+  """
   def get(pid, key) do
     send(pid, {:get, key, self()})
 

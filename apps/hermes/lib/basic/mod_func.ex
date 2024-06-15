@@ -1,4 +1,7 @@
 defmodule Basic.Zero do
+  @moduledoc """
+  Zero check.
+  """
   def zero?(0), do: true
   def zero?(+0.0), do: true
   def zero?(-0.0), do: true
@@ -7,6 +10,9 @@ defmodule Basic.Zero do
 end
 
 defmodule Basic.Concat do
+  @moduledoc """
+  Concat.
+  """
   def join(a) do
     a
   end

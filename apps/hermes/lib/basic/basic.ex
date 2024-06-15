@@ -1,4 +1,7 @@
 defmodule Basic.Basic do
+  @moduledoc """
+  Unicode elements.
+  """
   def put_strings do
     IO.puts(String.codepoints("👩‍🚒"))
     IO.puts(String.graphemes("👩‍🚒"))
