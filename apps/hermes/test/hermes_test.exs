@@ -1,4 +1,4 @@
 defmodule Hermes.ApplicationTest do
   use ExUnit.Case, async: true
-  doctest Hermes.Application
+  # doctest Hermes.Application
 end

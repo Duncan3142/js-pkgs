@@ -3,34 +3,42 @@ defmodule Otp.SuperTest do
   Tests for OTP.Super.
 
   """
+  require Logger
 
   use ExUnit.Case, async: false
 
   setup do
-    {:ok, sup} = Otp.Super.start_link()
-
+    sup = start_supervised!(Otp.Super)
     %{sup: sup}
   end
 
   test "starts the registry", %{sup: sup} do
     [{_, pid, _, _}] = Supervisor.which_children(sup)
+    reg = Process.whereis(MyRegistry)
 
-    assert is_pid(pid)
+    assert pid == reg
   end
 
-  # test "restarts the registry", %{sup: sup} do
-  #   [{_, pid, _, _}] = Supervisor.which_children(sup)
+  test "restarts the registry", %{sup: sup} do
+    reg = Process.whereis(MyRegistry)
 
-  #   Process.exit(pid, :kill)
+    mon = Process.monitor(reg)
 
-  #   [{_, pid, _, _}] = Supervisor.which_children(sup)
+    Process.exit(reg, :kill)
 
-  #   assert is_pid(pid)
-  # end
+    receive do
+      {:DOWN, ^mon, :process, ^reg, _} -> :ok
+    end
 
-  # test "names the registry", %{sup: sup} do
-  #   [{_, pid, _, _}] = Supervisor.which_children(sup)
-  #   res = Otp.Registry.get(pid, "void")
-  #   assert res == :nothing
-  # end
+    [{_, pid, _, _}] = Supervisor.which_children(sup)
+
+    assert is_pid(pid)
+    assert pid != reg
+  end
+
+  test "names the registry" do
+    reg = Process.whereis(MyRegistry)
+    res = Otp.Registry.get(reg, "void")
+    assert res == :nothing
+  end
 end
