@@ -28,6 +28,8 @@ defmodule Otp.SuperTest do
 
     receive do
       {:DOWN, ^mon, :process, ^reg, _} -> :ok
+    after
+      500 -> flunk("Registry did not die")
     end
 
     [{_, pid, _, _}] = Supervisor.which_children(sup)
