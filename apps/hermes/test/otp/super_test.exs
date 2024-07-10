@@ -5,7 +5,7 @@ defmodule Otp.SuperTest do
   """
   require Logger
 
-  use ExUnit.Case, async: false
+  use ExUnit.Case, async: true
 
   setup do
     sup = start_supervised!(Otp.Super)
