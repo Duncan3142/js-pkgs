@@ -55,4 +55,8 @@ defmodule Otp.Registry do
     names = Map.delete(names, name)
     {:noreply, {names, refs}}
   end
+
+  def handle_info(_, state) do
+    {:noreply, state}
+  end
 end

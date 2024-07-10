@@ -1,8 +1,4 @@
-defmodule HermesTest do
+defmodule Hermes.ApplicationTest do
   use ExUnit.Case, async: true
-  doctest Hermes
-
-  test "greets the world" do
-    assert Hermes.hello() == :world
-  end
+  doctest Hermes.Application
 end

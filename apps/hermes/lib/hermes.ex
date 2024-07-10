@@ -1,18 +1,15 @@
-defmodule Hermes do
+defmodule Hermes.Application do
   @moduledoc """
   Documentation for `Hermes`.
   """
 
+  use Application
+
   @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> Hermes.hello()
-      :world
-
+  start
   """
-  def hello do
-    :world
+  @impl true
+  def start(_type, _args) do
+    Otp.Super.start_link(name: Hermes.Supervisor)
   end
 end
