@@ -12,7 +12,8 @@ defmodule Otp.Super do
   @impl true
   def init(:meow) do
     kids = [
-      {Otp.Registry, name: MyRegistry}
+      {Otp.Registry, name: MyRegistry},
+      {DynamicSupervisor, name: MyBucketSupervisor, strategy: :one_for_one}
     ]
 
     Supervisor.init(kids, strategy: :one_for_one)

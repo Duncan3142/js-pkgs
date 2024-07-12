@@ -2,7 +2,7 @@ defmodule OTP.Bucket do
   @moduledoc """
   Agent based key-value store.
   """
-  use Agent
+  use Agent, restart: :temporary
 
   @doc """
   Starts a new bucket linked to the current process.

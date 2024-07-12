@@ -8,7 +8,8 @@ defmodule Otp.Registry do
   Starts the registry.
   """
   def start_link(opts \\ []) do
-    GenServer.start_link(__MODULE__, :empty, opts)
+    super = opts[:supervisor] || MyBucketSupervisor
+    GenServer.start_link(__MODULE__, super, Keyword.delete(opts, :supervisor))
   end
 
   @doc """
@@ -26,34 +27,34 @@ defmodule Otp.Registry do
   end
 
   @impl true
-  def init(:empty) do
-    {:ok, {%{}, %{}}}
+  def init(super) do
+    {:ok, {%{}, %{}, super}}
   end
 
   @impl true
-  def handle_call({:get, name}, _from, {names, refs}) do
-    {:reply, Map.get(names, name, :nothing), {names, refs}}
+  def handle_call({:get, name}, _from, {names, refs, super}) do
+    {:reply, Map.get(names, name, :nothing), {names, refs, super}}
   end
 
   @impl true
-  def handle_cast({:create, name}, {names, refs}) do
+  def handle_cast({:create, name}, {names, refs, super}) do
     if Map.has_key?(names, name) do
       {:noreply, {names, refs}}
     else
-      {:ok, bucket} = OTP.Bucket.start_link()
+      {:ok, bucket} = DynamicSupervisor.start_child(super, OTP.Bucket)
       ref = Process.monitor(bucket)
       refs = Map.put(refs, ref, name)
       names = Map.put(names, name, {:just, bucket})
 
-      {:noreply, {names, refs}}
+      {:noreply, {names, refs, super}}
     end
   end
 
   @impl true
-  def handle_info({:DOWN, ref, :process, _, _}, {names, refs}) do
+  def handle_info({:DOWN, ref, :process, _, _}, {names, refs, super}) do
     {name, refs} = Map.pop(refs, ref)
     names = Map.delete(names, name)
-    {:noreply, {names, refs}}
+    {:noreply, {names, refs, super}}
   end
 
   def handle_info(_, state) do

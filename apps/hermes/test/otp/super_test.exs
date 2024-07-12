@@ -13,7 +13,7 @@ defmodule Otp.SuperTest do
   end
 
   test "starts the registry", %{sup: sup} do
-    [{_, pid, _, _}] = Supervisor.which_children(sup)
+    [_, {_, pid, _, _}] = Supervisor.which_children(sup)
     reg = Process.whereis(MyRegistry)
 
     assert pid == reg
@@ -32,7 +32,7 @@ defmodule Otp.SuperTest do
       500 -> flunk("Registry did not die")
     end
 
-    [{_, pid, _, _}] = Supervisor.which_children(sup)
+    [_, {_, pid, _, _}] = Supervisor.which_children(sup)
 
     assert is_pid(pid)
     assert pid != reg

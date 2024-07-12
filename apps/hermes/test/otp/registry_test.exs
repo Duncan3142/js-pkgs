@@ -5,7 +5,9 @@ defmodule Otp.RegistryTest do
   use ExUnit.Case, async: true
 
   setup do
-    registry = start_supervised!(Otp.Registry)
+    start_supervised!({DynamicSupervisor, name: AnotherBucketSupervisor, strategy: :one_for_one})
+    registry = start_supervised!({Otp.Registry, [supervisor: AnotherBucketSupervisor]})
+
     Otp.Registry.create(registry, "setup")
     %{registry: registry}
   end
@@ -22,6 +24,12 @@ defmodule Otp.RegistryTest do
   test "removes stopped buckets", %{registry: registry} do
     {:just, bucket} = Otp.Registry.get(registry, "setup")
     Agent.stop(bucket)
+    :nothing = Otp.Registry.get(registry, "setup")
+  end
+
+  test "removes crashed buckets", %{registry: registry} do
+    {:just, bucket} = Otp.Registry.get(registry, "setup")
+    Agent.stop(bucket, :kill)
     :nothing = Otp.Registry.get(registry, "setup")
   end
 end
