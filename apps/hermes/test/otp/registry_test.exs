@@ -4,12 +4,12 @@ defmodule Otp.RegistryTest do
   """
   use ExUnit.Case, async: true
 
-  setup do
-    start_supervised!({DynamicSupervisor, name: AnotherBucketSupervisor, strategy: :one_for_one})
-    registry = start_supervised!({Otp.Registry, [supervisor: AnotherBucketSupervisor]})
+  setup ctx do
+    start_supervised!({DynamicSupervisor, name: :"#{ctx.test}Supervisor", strategy: :one_for_one})
 
-    Otp.Registry.create(registry, "setup")
-    %{registry: registry}
+    start_supervised!({Otp.Registry, supervisor: :"#{ctx.test}Supervisor", name: ctx.test})
+
+    %{registry: ctx.test}
   end
 
   test "Missing bucket", %{registry: registry} do
@@ -17,19 +17,22 @@ defmodule Otp.RegistryTest do
   end
 
   test "Get bucket", %{registry: registry} do
-    {:just, bucket} = Otp.Registry.get(registry, "setup")
+    Otp.Registry.create(registry, "get")
+    {:just, bucket} = Otp.Registry.get(registry, "get")
     assert is_pid(bucket)
   end
 
   test "removes stopped buckets", %{registry: registry} do
-    {:just, bucket} = Otp.Registry.get(registry, "setup")
+    Otp.Registry.create(registry, "stopped")
+    {:just, bucket} = Otp.Registry.get(registry, "stopped")
     Agent.stop(bucket)
-    :nothing = Otp.Registry.get(registry, "setup")
+    :nothing = Otp.Registry.get(registry, "stopped")
   end
 
   test "removes crashed buckets", %{registry: registry} do
-    {:just, bucket} = Otp.Registry.get(registry, "setup")
+    Otp.Registry.create(registry, "crashed")
+    {:just, bucket} = Otp.Registry.get(registry, "crashed")
     Agent.stop(bucket, :kill)
-    :nothing = Otp.Registry.get(registry, "setup")
+    :nothing = Otp.Registry.get(registry, "crashed")
   end
 end

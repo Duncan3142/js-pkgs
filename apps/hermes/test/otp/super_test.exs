@@ -39,8 +39,7 @@ defmodule Otp.SuperTest do
   end
 
   test "names the registry" do
-    reg = Process.whereis(MyRegistry)
-    res = Otp.Registry.get(reg, "void")
+    res = Otp.Registry.get(MyRegistry, "void")
     assert res == :nothing
   end
 end

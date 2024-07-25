@@ -4,8 +4,13 @@ defmodule Otp.Registry do
   """
   use GenServer
 
+  # Client API
+
   @doc """
   Starts the registry.
+  # Options
+  * `:supervisor` - The supervisor to start the buckets under.
+  * `:name` - The name of the registry.
   """
   def start_link(opts \\ []) do
     supervisor = Keyword.get(opts, :supervisor, MyBucketSupervisor)
@@ -17,44 +22,48 @@ defmodule Otp.Registry do
   Get the bucket by name.
   """
   def get(server, name) do
-    GenServer.call(server, {:get, name})
+    case :ets.lookup(server, name) do
+      [{^name, res}] -> res
+      [] -> :nothing
+    end
   end
 
   @doc """
   Create a new bucket by name.
   """
   def create(server, name) do
-    GenServer.cast(server, {:create, name})
+    GenServer.call(server, {:create, name})
+  end
+
+  # Server API
+
+  @impl true
+  def init({supervisor, reg_name}) do
+    names = :ets.new(reg_name, [:named_table, read_concurrency: true])
+    refs = %{}
+    {:ok, {names, refs, {supervisor}}}
   end
 
   @impl true
-  def init(props) do
-    {:ok, {%{}, %{}, props}}
-  end
+  def handle_call({:create, name}, _, {names, refs, {supervisor}}) do
+    case get(names, name) do
+      {:just, _} ->
+        {:reply, false, {names, refs, {supervisor}}}
 
-  @impl true
-  def handle_call({:get, name}, _from, {names, refs, props}) do
-    {:reply, Map.get(names, name, :nothing), {names, refs, props}}
-  end
+      :nothing ->
+        {:ok, bucket} = DynamicSupervisor.start_child(supervisor, OTP.Bucket)
+        ref = Process.monitor(bucket)
+        refs = Map.put(refs, ref, name)
+        :ets.insert(names, {name, {:just, bucket}})
 
-  @impl true
-  def handle_cast({:create, name}, {names, refs, {supervisor, reg_name}}) do
-    if Map.has_key?(names, name) do
-      {:noreply, {names, refs}}
-    else
-      {:ok, bucket} = DynamicSupervisor.start_child(supervisor, OTP.Bucket)
-      ref = Process.monitor(bucket)
-      refs = Map.put(refs, ref, name)
-      names = Map.put(names, name, {:just, bucket})
-
-      {:noreply, {names, refs, {supervisor, reg_name}}}
+        {:reply, true, {names, refs, {supervisor}}}
     end
   end
 
   @impl true
   def handle_info({:DOWN, ref, :process, _, _}, {names, refs, props}) do
     {name, refs} = Map.pop(refs, ref)
-    names = Map.delete(names, name)
+    :ets.delete(names, name)
     {:noreply, {names, refs, props}}
   end
 
