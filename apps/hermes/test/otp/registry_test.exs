@@ -26,6 +26,7 @@ defmodule Otp.RegistryTest do
     Otp.Registry.create(registry, "stopped")
     {:just, bucket} = Otp.Registry.get(registry, "stopped")
     Agent.stop(bucket)
+    Otp.Registry.ping(registry)
     :nothing = Otp.Registry.get(registry, "stopped")
   end
 
@@ -33,6 +34,7 @@ defmodule Otp.RegistryTest do
     Otp.Registry.create(registry, "crashed")
     {:just, bucket} = Otp.Registry.get(registry, "crashed")
     Agent.stop(bucket, :kill)
+    Otp.Registry.ping(registry)
     :nothing = Otp.Registry.get(registry, "crashed")
   end
 end

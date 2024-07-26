@@ -35,6 +35,10 @@ defmodule Otp.Registry do
     GenServer.call(server, {:create, name})
   end
 
+  def ping(server) do
+    GenServer.call(server, :ping)
+  end
+
   # Server API
 
   @impl true
@@ -47,8 +51,8 @@ defmodule Otp.Registry do
   @impl true
   def handle_call({:create, name}, _, {names, refs, {supervisor}}) do
     case get(names, name) do
-      {:just, _} ->
-        {:reply, false, {names, refs, {supervisor}}}
+      {:just, pid} ->
+        {:reply, pid, {names, refs, {supervisor}}}
 
       :nothing ->
         {:ok, bucket} = DynamicSupervisor.start_child(supervisor, OTP.Bucket)
@@ -56,8 +60,13 @@ defmodule Otp.Registry do
         refs = Map.put(refs, ref, name)
         :ets.insert(names, {name, {:just, bucket}})
 
-        {:reply, true, {names, refs, {supervisor}}}
+        {:reply, bucket, {names, refs, {supervisor}}}
     end
+  end
+
+  @impl true
+  def handle_call(:ping, _, state) do
+    {:reply, :pong, state}
   end
 
   @impl true
