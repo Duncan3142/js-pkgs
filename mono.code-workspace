@@ -45,10 +45,6 @@
 			"name": "tools/npm",
 		},
 		{
-			"path": "tools/changes-cli",
-			"name": "tools/changes-cli",
-		},
-		{
 			"path": "apps/hermes",
 			"name": "apps/hermes",
 		},
