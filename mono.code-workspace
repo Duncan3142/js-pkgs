@@ -45,8 +45,8 @@
 			"name": "tools/npm",
 		},
 		{
-			"path": "apps/hermes",
-			"name": "apps/hermes",
+			"path": "apps/hermes_umbrella",
+			"name": "apps/hermes_umbrella",
 		},
 		{
 			"path": "pkgs/eslint-config",

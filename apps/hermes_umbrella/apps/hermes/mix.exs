@@ -5,10 +5,12 @@ defmodule Hermes.MixProject do
     [
       app: :hermes,
       version: "0.1.0",
-      elixir: "~> 1.16",
+      build_path: "../../.build",
+      config_path: "../../config/config.exs",
+      deps_path: "../../.deps",
+      lockfile: "../../mix.lock",
+      elixir: "~> 1.17",
       start_permanent: Mix.env() == :prod,
-      build_path: ".build",
-      deps_path: ".deps",
       deps: deps()
     ]
   end
