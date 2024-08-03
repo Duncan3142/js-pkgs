@@ -13,7 +13,7 @@ defmodule Otp.Registry do
   * `:name` - The name of the registry.
   """
   def start_link(opts \\ []) do
-    supervisor = Keyword.get(opts, :supervisor, MyBucketSupervisor)
+    supervisor = Keyword.get(opts, :supervisor, Hermes.BucketSupervisor)
     reg_name = Keyword.get(opts, :name, __MODULE__)
     GenServer.start_link(__MODULE__, {supervisor, reg_name}, opts)
   end

@@ -10,6 +10,11 @@ defmodule Hermes.Application do
   """
   @impl true
   def start(_type, _args) do
-    Otp.Super.start_link(name: Hermes.Supervisor)
+    kids = [
+      {DynamicSupervisor, name: Hermes.BucketSupervisor, strategy: :one_for_one},
+      {Otp.Registry, name: Hermes.BucketRegistry}
+    ]
+
+    Supervisor.start_link(kids, strategy: :one_for_all, name: __MODULE__)
   end
 end
