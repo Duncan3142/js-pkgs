@@ -41,16 +41,41 @@ defmodule HermesServer do
   end
 
   defp serve(socket) do
-    socket |> read_line() |> write_line(socket)
+    output =
+      with {:ok, line} <- read_line(socket),
+           {:ok, command} <- HermesServer.Command.parse(line),
+           do: HermesServer.Command.run(command)
+
+    write_line(socket, output)
     serve(socket)
   end
 
   defp read_line(socket) do
-    {:ok, line} = :gen_tcp.recv(socket, 0)
-    line
+    :gen_tcp.recv(socket, 0)
   end
 
-  defp write_line(line, socket) do
-    :gen_tcp.send(socket, line)
+  defp write_line(socket, {:ok, text}) do
+    :gen_tcp.send(socket, text)
+  end
+
+  defp write_line(socket, {:error, :unknown_command}) do
+    :gen_tcp.send(socket, "ERROR - UNKNOWN_COMMAND\n")
+  end
+
+  defp write_line(socket, {:error, :bucket_not_found}) do
+    :gen_tcp.send(socket, "ERROR - BUCKET_NOT_FOUND\n")
+  end
+
+  defp write_line(socket, {:error, :key_not_found}) do
+    :gen_tcp.send(socket, "ERROR - KEY NOT FOUND\n")
+  end
+
+  defp write_line(_socket, {:error, :closed}) do
+    exit(:shutdown)
+  end
+
+  defp write_line(socket, {:error, err}) do
+    :gen_tcp.send(socket, "UNEXPECTED ERROR\n")
+    exit(err)
   end
 end
