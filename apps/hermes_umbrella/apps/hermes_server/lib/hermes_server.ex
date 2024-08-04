@@ -60,7 +60,7 @@ defmodule HermesServer do
   end
 
   defp write_line(socket, {:error, :key_not_found}) do
-    :gen_tcp.send(socket, "ERROR - KEY NOT FOUND\n")
+    :gen_tcp.send(socket, "ERROR - KEY_NOT_FOUND\n")
   end
 
   defp write_line(_socket, {:error, :closed}) do
