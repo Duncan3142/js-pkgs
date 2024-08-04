@@ -20,4 +20,20 @@ defmodule HermesServer.CommandTest do
     assert HermesServer.Command.run(reg_name, {:get, "setup_bucket", "setup_key"}) ==
              {:ok, "setup_value\nOK\n"}
   end
+
+  test "run put", %{reg_name: reg_name} do
+    assert HermesServer.Command.run(reg_name, {:put, "setup_bucket", "setup_key", "new"}) ==
+             {:ok, "OK\n"}
+
+    assert HermesServer.Command.run(reg_name, {:get, "setup_bucket", "setup_key"}) ==
+             {:ok, "new\nOK\n"}
+  end
+
+  test "run delete", %{reg_name: reg_name} do
+    assert HermesServer.Command.run(reg_name, {:delete, "setup_bucket", "setup_key"}) ==
+             {:ok, "OK\n"}
+
+    assert HermesServer.Command.run(reg_name, {:get, "setup_bucket", "setup_key"}) ==
+             {:error, :key_not_found}
+  end
 end
