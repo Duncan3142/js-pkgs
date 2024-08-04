@@ -44,7 +44,7 @@ defmodule HermesServer do
     output =
       with {:ok, line} <- read_line(socket),
            {:ok, command} <- HermesServer.Command.parse(line),
-           do: HermesServer.Command.run(command)
+           do: HermesServer.Command.run(Hermes.BucketRegistry, command)
 
     write_line(socket, output)
     serve(socket)
