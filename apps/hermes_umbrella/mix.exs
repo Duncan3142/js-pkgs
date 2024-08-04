@@ -8,7 +8,8 @@ defmodule HermesUmbrella.MixProject do
       start_permanent: Mix.env() == :prod,
       build_path: ".build",
       deps_path: ".deps",
-      deps: deps()
+      deps: deps(),
+      test_coverage: [output: ".cover"]
     ]
   end
 

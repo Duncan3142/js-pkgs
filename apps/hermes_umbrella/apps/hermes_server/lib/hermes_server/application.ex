@@ -11,7 +11,17 @@ defmodule HermesServer.Application do
 
     children = [
       {Task.Supervisor, name: HermesServer.TaskSupervisor},
-      Supervisor.child_spec({Task, fn -> HermesServer.accept(port) end}, restart: :permanent)
+      Supervisor.child_spec(
+        {Task,
+         fn ->
+           HermesServer.accept(
+             port: port,
+             task_supervisor: HermesServer.TaskSupervisor,
+             bucket_registry: Hermes.BucketRegistry
+           )
+         end},
+        restart: :permanent
+      )
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

@@ -12,7 +12,7 @@ defmodule Hermes.Application do
   def start(_type, _args) do
     kids = [
       {DynamicSupervisor, name: Hermes.BucketSupervisor, strategy: :one_for_one},
-      {Otp.Registry, name: Hermes.BucketRegistry}
+      {Otp.Registry, name: Hermes.BucketRegistry, supervisor: Hermes.BucketSupervisor}
     ]
 
     Supervisor.start_link(kids, strategy: :one_for_all, name: __MODULE__)

@@ -5,20 +5,10 @@ defmodule HermesServer do
 
   require Logger
 
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> HermesServer.hello()
-      :world
-
-  """
-  def hello do
-    :world
-  end
-
-  def accept(port) do
+  def accept(opts) do
+    port = Keyword.fetch!(opts, :port)
+    task_supervisor = Keyword.fetch!(opts, :task_supervisor)
+    bucket_registry = Keyword.fetch!(opts, :bucket_registry)
     # The options below mean:
     #
     # 1. `:binary` - receives data as binaries (instead of lists)
@@ -30,24 +20,27 @@ defmodule HermesServer do
       :gen_tcp.listen(port, [:binary, packet: :line, active: false, reuseaddr: true])
 
     Logger.info("Listening on port #{port}")
-    loop_acceptor(listen_socket)
+    loop_acceptor(listen_socket, task_supervisor, bucket_registry)
   end
 
-  defp loop_acceptor(listen_socket) do
+  defp loop_acceptor(listen_socket, task_supervisor, bucket_registry) do
     {:ok, socket} = :gen_tcp.accept(listen_socket)
-    {:ok, pid} = Task.Supervisor.start_child(HermesServer.TaskSupervisor, fn -> serve(socket) end)
+
+    {:ok, pid} =
+      Task.Supervisor.start_child(task_supervisor, fn -> serve(socket, bucket_registry) end)
+
     :ok = :gen_tcp.controlling_process(socket, pid)
-    loop_acceptor(listen_socket)
+    loop_acceptor(listen_socket, task_supervisor, bucket_registry)
   end
 
-  defp serve(socket) do
+  defp serve(socket, bucket_registry) do
     output =
       with {:ok, line} <- read_line(socket),
            {:ok, command} <- HermesServer.Command.parse(line),
-           do: HermesServer.Command.run(Hermes.BucketRegistry, command)
+           do: HermesServer.Command.run(bucket_registry, command)
 
     write_line(socket, output)
-    serve(socket)
+    serve(socket, bucket_registry)
   end
 
   defp read_line(socket) do

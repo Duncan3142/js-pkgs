@@ -1,9 +1,6 @@
 # Hidden
 .*
 
-# If you run "mix test --cover", coverage assets end up here.
-/cover/
-
 # Where third-party dependencies like ExDoc output generated docs.
 /doc/
 

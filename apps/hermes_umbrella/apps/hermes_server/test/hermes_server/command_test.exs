@@ -36,4 +36,14 @@ defmodule HermesServer.CommandTest do
     assert HermesServer.Command.run(reg_name, {:get, "setup_bucket", "setup_key"}) ==
              {:error, :key_not_found}
   end
+
+  test "run get - missing bucket", %{reg_name: reg_name} do
+    assert HermesServer.Command.run(reg_name, {:get, "unknown", "unknown"}) ==
+             {:error, :bucket_not_found}
+  end
+
+  test "run get - missing key", %{reg_name: reg_name} do
+    assert HermesServer.Command.run(reg_name, {:get, "setup_bucket", "unknown"}) ==
+             {:error, :key_not_found}
+  end
 end
