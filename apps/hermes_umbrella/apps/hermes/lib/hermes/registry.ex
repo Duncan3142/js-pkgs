@@ -1,4 +1,4 @@
-defmodule Otp.Registry do
+defmodule Hermes.Registry do
   @moduledoc """
   GenSerer based bucket registry.
   """
@@ -55,7 +55,7 @@ defmodule Otp.Registry do
         {:reply, pid, {names, refs, {supervisor}}}
 
       :nothing ->
-        {:ok, bucket} = DynamicSupervisor.start_child(supervisor, OTP.Bucket)
+        {:ok, bucket} = DynamicSupervisor.start_child(supervisor, Hermes.Bucket)
         ref = Process.monitor(bucket)
         refs = Map.put(refs, ref, name)
         :ets.insert(names, {name, {:just, bucket}})

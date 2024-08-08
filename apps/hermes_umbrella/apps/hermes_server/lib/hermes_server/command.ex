@@ -49,14 +49,14 @@ defmodule HermesServer.Command do
   def run(bucket_registry_pid, command)
 
   def run(pid, {:create, bucket}) do
-    Otp.Registry.create(pid, bucket)
+    Hermes.Registry.create(pid, bucket)
 
     {:ok, "OK\n"}
   end
 
   def run(pid, {:get, bucket, key}) do
     lookup(pid, bucket, fn bucket_pid ->
-      case OTP.Bucket.get(bucket_pid, key) do
+      case Hermes.Bucket.get(bucket_pid, key) do
         :nothing -> {:error, :key_not_found}
         {:just, value} -> {:ok, "#{value}\nOK\n"}
       end
@@ -65,20 +65,20 @@ defmodule HermesServer.Command do
 
   def run(pid, {:put, bucket, key, value}) do
     lookup(pid, bucket, fn bucket_pid ->
-      OTP.Bucket.set(bucket_pid, key, value)
+      Hermes.Bucket.set(bucket_pid, key, value)
       {:ok, "OK\n"}
     end)
   end
 
   def run(pid, {:delete, bucket, key}) do
     lookup(pid, bucket, fn bucket_pid ->
-      OTP.Bucket.delete(bucket_pid, key)
+      Hermes.Bucket.delete(bucket_pid, key)
       {:ok, "OK\n"}
     end)
   end
 
   defp lookup(bucket_registry_pid, bucket_name, action) do
-    case Otp.Registry.get(bucket_registry_pid, bucket_name) do
+    case Hermes.Registry.get(bucket_registry_pid, bucket_name) do
       {:just, bucket_pid} -> action.(bucket_pid)
       :nothing -> {:error, :bucket_not_found}
     end

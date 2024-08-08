@@ -9,7 +9,7 @@ defmodule HermesServer.CommandTest do
     sup_name = :"#{ctx.test}super"
     reg_name = :"#{ctx.test}reg"
     start_supervised!({DynamicSupervisor, [name: sup_name, strategy: :one_for_one]})
-    start_supervised!({Otp.Registry, [supervisor: sup_name, name: reg_name]})
+    start_supervised!({Hermes.Registry, [supervisor: sup_name, name: reg_name]})
     HermesServer.Command.run(reg_name, {:create, "setup_bucket"})
     HermesServer.Command.run(reg_name, {:put, "setup_bucket", "setup_key", "setup_value"})
 

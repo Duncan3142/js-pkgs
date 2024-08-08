@@ -1,4 +1,4 @@
-defmodule OTP.Bucket do
+defmodule Hermes.Bucket do
   @moduledoc """
   Agent based key-value store.
   """
