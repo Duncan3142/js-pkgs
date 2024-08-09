@@ -78,7 +78,10 @@ defmodule HermesServer.Command do
   end
 
   defp lookup(bucket_registry_pid, bucket_name, action) do
-    case Hermes.Registry.get(bucket_registry_pid, bucket_name) do
+    case Hermes.Router.route(bucket_name, Hermes.Registry, :get, [
+           bucket_registry_pid,
+           bucket_name
+         ]) do
       {:just, bucket_pid} -> action.(bucket_pid)
       :nothing -> {:error, :bucket_not_found}
     end

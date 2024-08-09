@@ -3,6 +3,9 @@ defmodule HermesServer.CommandTest do
   HermesServer.Command tests
   """
   use ExUnit.Case, async: true
+
+  @moduletag :distributed
+
   doctest HermesServer.Command
 
   setup ctx do
