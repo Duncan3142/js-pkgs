@@ -17,8 +17,6 @@ defmodule HermesServerTest do
     %{socket: socket}
   end
 
-  @moduletag :distributed
-
   test "server behaviour", %{socket: socket} do
     assert make_request(socket, "UNKNOWN shopping\n") == "ERROR - UNKNOWN_COMMAND\n"
     assert make_request(socket, "GET shopping meow\n") == "ERROR - BUCKET_NOT_FOUND\n"
