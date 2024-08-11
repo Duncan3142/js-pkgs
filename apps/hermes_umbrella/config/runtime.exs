@@ -3,6 +3,6 @@ import Config
 config :iex, default_prompt: "❈"
 
 config :hermes,
-  routing_table: [
+  router_entries: [
     {?a..?z, node()}
   ]

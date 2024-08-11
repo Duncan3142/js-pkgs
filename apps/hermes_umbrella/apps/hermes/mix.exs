@@ -21,7 +21,7 @@ defmodule Hermes.MixProject do
     [
       extra_applications: [:logger],
       env: [
-        routing_table: []
+        router_entries: []
       ],
       mod: {Hermes.Application, []}
     ]

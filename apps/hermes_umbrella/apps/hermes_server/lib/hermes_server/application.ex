@@ -17,6 +17,7 @@ defmodule HermesServer.Application do
            HermesServer.accept(
              port: port,
              task_supervisor: HermesServer.TaskSupervisor,
+             router: %Hermes.Router.Env{app: :hermes, key: :router_entries},
              bucket_registry: Hermes.BucketRegistry
            )
          end},
