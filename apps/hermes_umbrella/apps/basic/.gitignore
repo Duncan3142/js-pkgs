@@ -1,0 +1,26 @@
+# Hidden
+.*
+
+# Where third-party dependencies like ExDoc output generated docs.
+/doc/
+
+# If the VM crashes, it generates a dump, let's ignore it too.
+erl_crash.dump
+
+# Also ignore archive artifacts (built via "mix archive.build").
+*.ez
+
+# Ignore package tarball (built via "mix hex.build").
+basic-*.tar
+
+# Temporary files, for example, from tests.
+/tmp/
+
+# Git
+!.gitignore
+
+# Formatter
+!.formatter.exs
+
+# Credo
+!.credo.exs

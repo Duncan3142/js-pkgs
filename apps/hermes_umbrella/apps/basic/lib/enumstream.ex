@@ -3,7 +3,7 @@ defmodule Basic.Enumstream do
   Enum stream.
   """
   def stream do
-    stream = File.stream!(File.cwd!() <> "/lib/basic/enumstream.ex")
+    stream = File.stream!(File.cwd!() <> "/lib/enumstream.ex")
     Enum.take(stream, 2)
   end
 end
