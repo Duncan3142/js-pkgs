@@ -13,7 +13,8 @@ defmodule HermesServerTest do
 
   setup do
     opts = [:binary, packet: :line, active: false]
-    {:ok, socket} = :gen_tcp.connect(~c"localhost", 4040, opts)
+    port = String.to_integer(System.get_env("PORT") || "4040")
+    {:ok, socket} = :gen_tcp.connect(~c"localhost", port, opts)
     %{socket: socket}
   end
 
