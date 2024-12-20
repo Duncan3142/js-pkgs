@@ -4,6 +4,8 @@ defmodule Hermes.Registry do
   """
   use GenServer
 
+  require Logger
+
   # Client API
 
   @doc """
@@ -22,6 +24,8 @@ defmodule Hermes.Registry do
   Get the bucket by name.
   """
   def get(server, name) do
+    Logger.debug("Getting bucket: #{name}")
+
     case :ets.lookup(server, name) do
       [{^name, res}] -> res
       [] -> :nothing

@@ -45,6 +45,10 @@
 			"name": "tools/npm",
 		},
 		{
+			"path": "apps/sophrosyne_umbrella",
+			"name": "apps/sophrosyne_umbrella",
+		},
+		{
 			"path": "apps/hermes_umbrella",
 			"name": "apps/hermes_umbrella",
 		},

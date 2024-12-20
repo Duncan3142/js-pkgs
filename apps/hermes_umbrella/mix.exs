@@ -9,7 +9,8 @@ defmodule HermesUmbrella.MixProject do
       build_path: ".build",
       deps_path: ".deps",
       deps: deps(),
-      test_coverage: [output: ".cover"]
+      test_coverage: [output: ".cover"],
+      releases: releases()
     ]
   end
 
@@ -20,5 +21,31 @@ defmodule HermesUmbrella.MixProject do
   # Run "mix help deps" for examples and options.
   defp deps do
     [{:credo, "~> 1.7", only: [:dev, :test], runtime: false}]
+  end
+
+  defp releases do
+    [
+      api: [
+        version: "0.0.1",
+        applications: [
+          hermes_server: :permanent
+        ],
+        cookie: "my_cookie"
+      ],
+      app_alpha: [
+        version: "0.0.1",
+        applications: [
+          hermes: :permanent
+        ],
+        cookie: "my_cookie"
+      ],
+      app_beta: [
+        version: "0.0.1",
+        applications: [
+          hermes: :permanent
+        ],
+        cookie: "my_cookie"
+      ]
+    ]
   end
 end
